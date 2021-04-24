@@ -1,4 +1,4 @@
-package Weather;
+package Entity.Weather;
 
 import javax.persistence.MappedSuperclass;
 
