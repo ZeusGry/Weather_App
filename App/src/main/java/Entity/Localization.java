@@ -17,18 +17,6 @@ public class Localization {
         return ID;
     }
 
-    public String getCity() {
-        return city;
-    }
-
-    public String getRegion() {
-        return region;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
     public Double getLongitude() {
         return longitude;
     }
