@@ -5,12 +5,14 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.util.List;
 
 @Entity
 public class Localization {
     @Id
+            @GeneratedValue
     Long ID;
     String city;
     String region;

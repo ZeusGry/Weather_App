@@ -2,8 +2,6 @@ package core;
 
 import Entity.Localization;
 import Entity.Result;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -49,7 +47,8 @@ public class Launcher {
         scanner.nextLine();
 
         if (answer == 0) {
-        } else if (answer >=localizations.size() || answer < 0) {
+            return;
+        } else if (answer >localizations.size() || answer < 0) {
             System.out.println("Wybrano nieistniejący numer, spróbuj ponownie");
             localizationChoice();
         } else {
