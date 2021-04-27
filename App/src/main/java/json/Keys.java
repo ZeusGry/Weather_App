@@ -14,7 +14,7 @@ public class Keys {
             try {
                 ObjectMapper objectMapper = new ObjectMapper()
                         .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-                keys = objectMapper.readValue(new File("src/main/resources/keys.json"), Keys.class);
+                keys = objectMapper.readValue(new File("App/src/main/resources/keys.json"), Keys.class);
             } catch (IOException e) {
                 e.printStackTrace();
             }
