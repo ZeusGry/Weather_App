@@ -1,8 +1,12 @@
 package Entity;
 
+import hibernate_core.HibernateHelper;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Localization {
@@ -14,17 +18,31 @@ public class Localization {
     Double longitude;
     Double latitude;
 
-    public static ArrayList<Localization> getList() {
-        //TODO
-        return null;
+    public Localization(String city, String country) {
+        this.city = city;
+        this.country = country;
+//TODO
+        try (Session session = HibernateHelper.INSTANCE.getSession()) {
+            Transaction transaction = session.beginTransaction();
+            session.persist(this);
+            transaction.commit();
+        }
     }
 
-    public void setLongitude(Double longitude) {
-        this.longitude = longitude;
+    @Override
+    public String toString() {
+        return "Miasto='" + city + '\'' +
+                ", kraj='" + country + '\'';
     }
 
-    public void setLatitude(Double latitude) {
-        this.latitude = latitude;
+    public Localization() {
+    }
+
+    public static List<Localization> getList() {
+        try (Session session = HibernateHelper.INSTANCE.getSession()) {
+            return session.createQuery("SELECT s FROM Localization s", Localization.class)
+                    .getResultList();
+        }
     }
 
     public Long getID() {

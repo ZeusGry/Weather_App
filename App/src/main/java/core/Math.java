@@ -3,6 +3,7 @@ package core;
 import Entity.Weather.WeatherHelper;
 
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.OptionalDouble;
 
 public class Math {
@@ -12,21 +13,24 @@ public class Math {
 
     public static OptionalDouble calculateAvgTemperature(WeatherHelper... weathers) {
         return Arrays.stream(weathers)
-                .map(weather -> weather.getTemperature())
+                .map(WeatherHelper::getTemperature)
+                .filter(Objects::nonNull)
                 .mapToDouble(e -> e)
                 .average();
     }
 
     public static OptionalDouble calculateAvgPressure(WeatherHelper... weathers) {
         return Arrays.stream(weathers)
-                .map(weather -> weather.getPressure())
+                .map(WeatherHelper::getPressure)
+                .filter(Objects::nonNull)
                 .mapToDouble(e -> e)
                 .average();
     }
 
     public static OptionalDouble calculateAvgHumidity(WeatherHelper... weathers) {
         return Arrays.stream(weathers)
-                .map(weather -> weather.getHumidity())
+                .map(WeatherHelper::getHumidity)
+                .filter(Objects::nonNull)
                 .mapToDouble(e -> e)
                 .average();
     }

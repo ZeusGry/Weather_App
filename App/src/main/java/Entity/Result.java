@@ -1,8 +1,11 @@
 package Entity;
 
 import Entity.Weather.*;
+import hibernate_core.HibernateHelper;
 import json.JSONAsker;
 import json.Servis;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 
 import javax.persistence.Entity;
@@ -36,6 +39,19 @@ public class Result {
                 }
             }
         }
+        try (Session session = HibernateHelper.INSTANCE.getSession()) {
+            Transaction transaction = session.beginTransaction();
+            session.persist(accuWeather);
+            session.persist(averageWeather);
+            session.persist(openWeatherMap);
+            session.persist(weatherStack);
+            session.persist(this);
+            transaction.commit();
+        }
+
+    }
+
+    public Result() {
     }
 
     public AverageWeather getAverageWeather() {

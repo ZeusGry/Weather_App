@@ -36,7 +36,7 @@ public class JSONAsker {
 
 
     public static String getJSON(String url) {
-        String json = null;
+        String json = "nie udało się";
         Request request = new Request.Builder()
                 .url(url)
                 .build();

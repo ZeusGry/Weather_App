@@ -4,16 +4,17 @@ import Entity.Localization;
 import Entity.Result;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Launcher {
     static boolean finish = false;
-    static ArrayList<Localization> localizations = Localization.getList();
+    static List<Localization> localizations = Localization.getList();
     public static void start (){
         while (!finish) {
             switch (choice()) {
                 case 1:
-                    localizations.add(new Localization());
+                    newLocalization();
                     break;
                 case 2:
                     localizationChoice();
@@ -27,11 +28,20 @@ public class Launcher {
         }
     }
 
+    private static void newLocalization() {
+        Scanner scanner =  new Scanner(System.in);
+        System.out.println("Podaj miasto");
+        String city = scanner.nextLine();
+        System.out.println("Podaj skrót literowy kraju");
+        String country = scanner.nextLine();
+        localizations.add(new Localization(city, country));
+    }
+
     private static void localizationChoice() {
         Scanner scanner = new Scanner(System.in);
         int count = 1;
         for (Localization localization : localizations) {
-            System.out.println("" + (count++) + localization);
+            System.out.println("" + (count++) + " " + localization);
         }
         System.out.println("Wybierz numer lokalizacji dla której wyświetlić pogodę\n" +
                 "Albo 0 by wrócić do menu głównego");
@@ -39,7 +49,6 @@ public class Launcher {
         scanner.nextLine();
 
         if (answer == 0) {
-            return;
         } else if (answer >=localizations.size() || answer < 0) {
             System.out.println("Wybrano nieistniejący numer, spróbuj ponownie");
             localizationChoice();
