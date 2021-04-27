@@ -20,4 +20,24 @@ public abstract class WeatherHelper {
 
     public WeatherHelper() {
     }
+
+    public Double getTemperature() {
+        return temperature;
+    }
+
+    public Double getPressure() {
+        return pressure;
+    }
+
+    public Double getHumidity() {
+        return humidity;
+    }
+
+    public Double getSpeedWind() {
+        return speedWind;
+    }
+
+    public Double getDirectionWind() {
+        return directionWind;
+    }
 }

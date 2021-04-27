@@ -1,8 +1,12 @@
-import hibernate_core.HibernateHelper;
+import Entity.Localization;
 
 public class Main {
 
-    public static void main(String[] args) {
-        HibernateHelper.INSTANCE.getSession();
+
+    public static void main(String[] args)  {
+        Localization localization = new Localization();
+        localization.setLatitude(50D);
+        localization.setLongitude(50D);
+
     }
 }

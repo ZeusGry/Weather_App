@@ -15,6 +15,8 @@ public class OpenWeatherMap extends WeatherHelper {
         super(temperature, pressure, humidity, speedWind, directionWind);
     }
 
+
     public OpenWeatherMap() {
     }
 }
+

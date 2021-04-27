@@ -14,6 +14,17 @@ public class AverageWeather extends WeatherHelper {
         super(temperature, pressure, humidity, speedWind, directionWind);
     }
 
+    @Override
+    public String toString() {
+        return "AverageWeather{" +
+                "temperatura=" + temperature +
+                ", ciśnienie=" + pressure +
+                ", wilgotność=" + humidity +
+                ", prędkość wiatru=" + speedWind +
+                ", kierunek wiatru=" + directionWind +
+                '}';
+    }
+
     public AverageWeather() {
     }
 }

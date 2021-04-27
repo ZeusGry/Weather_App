@@ -11,7 +11,7 @@ import java.io.IOException;
 
 public class JSONAsker {
 
-    public String urlMaker(Servis servis, Localization localization) {
+    public static String urlMaker(Servis servis, Localization localization) {
         String URL = servis.getUrl()
                 .replace("Longitude", Double.toString(localization.getLongitude()))
                 .replace("Latination", Double.toString(localization.getLatitude()))
@@ -35,7 +35,7 @@ public class JSONAsker {
     }
 
 
-    public String getJSON(String url) {
+    public static String getJSON(String url) {
         String json = null;
         Request request = new Request.Builder()
                 .url(url)
