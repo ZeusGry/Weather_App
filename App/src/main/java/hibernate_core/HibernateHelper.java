@@ -29,4 +29,6 @@ public enum HibernateHelper {
     public Session getSession() {
         return sessionFactory.openSession();
     }
+
+
 }
