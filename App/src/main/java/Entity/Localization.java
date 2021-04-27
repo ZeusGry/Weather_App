@@ -12,4 +12,16 @@ public class Localization {
     String country;
     Double longitude;
     Double latitude;
+
+    public Long getID() {
+        return ID;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
 }
