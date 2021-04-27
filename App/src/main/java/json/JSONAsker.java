@@ -14,7 +14,7 @@ public class JSONAsker {
     public static String urlMaker(Servis servis, Localization localization) {
         String URL = servis.getUrl()
                 .replace("Longitude", Double.toString(localization.getLongitude()))
-                .replace("latination", Double.toString(localization.getLatitude()))
+                .replace("Latination", Double.toString(localization.getLatitude()))
                 .replace("CityKey", Long.toString(localization.getID()));
         switch (servis) {
             case ACCUWEATHER:
