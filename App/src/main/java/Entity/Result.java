@@ -37,34 +37,7 @@ public class Result {
         for (Servis servis : Servis.values()) {
             if (servis.isWeather()) {
                 String json = JSONAsker.getJSON(JSONAsker.urlMaker(servis, localization));
-                switch (servis) {
-                    case ACCUWEATHER:
-                        try {
-                            accuWeather = objectMapper.readValue(json.substring(1, json.length()), RootAccWeather.class).getAccuWeather();
-                            tempList.add(accuWeather);
-                        } catch (JsonProcessingException e) {
-                            System.out.println("Nie udało się pobrać pogody z AccuWeather");
-                        }
-                        break;
-                    case WEATHER_STACK:
-                        try {
-                            weatherStack = objectMapper.readValue(json, RootWeatherStack.class)
-                                    .getWeatherStack();
-                            tempList.add(weatherStack);
-                        } catch (JsonProcessingException e) {
-                            System.out.println("Nie udało się pobrać pogody z WeatherStack");
-                        }
-                        break;
-                    case OPEN_WEATHER:
-                        try {
-                            openWeatherMap = objectMapper.readValue(json, RootOpenWeatherMap.class)
-                                    .getOpenWeatherMap();
-                            tempList.add(openWeatherMap);
-                        } catch (JsonProcessingException e) {
-                            System.out.println("Nie udało się pobrać pogody z OpenWeather");
-                        }
-                        break;
-                }
+                weatherMapping(tempList, objectMapper, servis, json);
             }
         }
 
@@ -74,7 +47,10 @@ public class Result {
                 .orElse(0), MathWeather.calculateAvgPressure(weathers)
                 .orElse(0), MathWeather.calculateAvgHumidity(weathers)
                 .orElse(0), MathWeather.calculateAvgSpeedWind(weathers), MathWeather.calculateAvgDirectionWind());
+        transactionCommit();
+    }
 
+    private void transactionCommit() {
         try (Session session = HibernateHelper.INSTANCE.getSession()) {
             Transaction transaction = session.beginTransaction();
             session.persist(accuWeather);
@@ -84,7 +60,37 @@ public class Result {
             session.persist(this);
             transaction.commit();
         }
+    }
 
+    private void weatherMapping(List<WeatherHelper> tempList, ObjectMapper objectMapper, Servis servis, String json) {
+        switch (servis) {
+            case ACCUWEATHER:
+                try {
+                    accuWeather = objectMapper.readValue(json.substring(1, json.length()), RootAccWeather.class).getAccuWeather();
+                    tempList.add(accuWeather);
+                } catch (JsonProcessingException e) {
+                    System.out.println("Nie udało się pobrać pogody z AccuWeather");
+                }
+                break;
+            case WEATHER_STACK:
+                try {
+                    weatherStack = objectMapper.readValue(json, RootWeatherStack.class)
+                            .getWeatherStack();
+                    tempList.add(weatherStack);
+                } catch (JsonProcessingException e) {
+                    System.out.println("Nie udało się pobrać pogody z WeatherStack");
+                }
+                break;
+            case OPEN_WEATHER:
+                try {
+                    openWeatherMap = objectMapper.readValue(json, RootOpenWeatherMap.class)
+                            .getOpenWeatherMap();
+                    tempList.add(openWeatherMap);
+                } catch (JsonProcessingException e) {
+                    System.out.println("Nie udało się pobrać pogody z OpenWeather");
+                }
+                break;
+        }
     }
 
     public Result() {

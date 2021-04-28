@@ -34,6 +34,25 @@ public class Localization {
         this.country = country.toUpperCase();
         ObjectMapper objectMapper = new ObjectMapper()
                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        isOkey = fillLocalization(isOkey, objectMapper);
+
+
+        transactionCommit(isOkey);
+    }
+
+    private void transactionCommit(boolean isOkey) {
+        try (Session session = HibernateHelper.INSTANCE.getSession()) {
+            Transaction transaction = session.beginTransaction();
+            if (isOkey) {
+                session.persist(this);
+                transaction.commit();
+            } else {
+                transaction.rollback();
+            }
+        }
+    }
+
+    private boolean fillLocalization(boolean isOkey, ObjectMapper objectMapper) {
         try {
             RootOpenWeatherMap tempLoc = objectMapper.readValue(JSONAsker.getJSON(createURLForNewLozalizarion()), RootOpenWeatherMap.class);
             if (tempLoc.getLat() == null) {
@@ -54,17 +73,7 @@ public class Localization {
                 isOkey = false;
             }
         }
-
-
-        try (Session session = HibernateHelper.INSTANCE.getSession()) {
-            Transaction transaction = session.beginTransaction();
-            if (isOkey) {
-                session.persist(this);
-                transaction.commit();
-            } else {
-                transaction.rollback();
-            }
-        }
+        return isOkey;
     }
 
     private String createURLForNewLozalizarion() {
