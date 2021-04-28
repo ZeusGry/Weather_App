@@ -58,6 +58,7 @@ public class Localization {
 
         try (Session session = HibernateHelper.INSTANCE.getSession()) {
             Transaction transaction = session.beginTransaction();
+
             if (isOkey) {
                 session.persist(this);
                 transaction.commit();
