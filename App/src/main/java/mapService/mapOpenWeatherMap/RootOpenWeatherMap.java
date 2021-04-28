@@ -25,11 +25,17 @@ public class RootOpenWeatherMap {
         return new OpenWeatherMap(main.getTemp(),(double) main.getPressure(),(double) main.getHumidity(),wind.getSpeed(),(double) wind.getDeg());
     }
 
-    public double getLat() {
+    public Double getLat() {
+        if (coord == null) {
+            return null;
+        }
         return coord.getLat();
     }
 
-    public double getLon() {
+    public Double getLon() {
+        if (coord == null) {
+            return null;
+        }
         return coord.getLon();
     }
 }
