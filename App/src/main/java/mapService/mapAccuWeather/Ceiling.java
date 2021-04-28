@@ -2,9 +2,9 @@ package mapService.mapAccuWeather;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class Minimum {
+public class Ceiling {
     @JsonProperty("Value")
-    public double value;
+    public int value;
     @JsonProperty("Unit")
     public String unit;
     @JsonProperty("UnitType")

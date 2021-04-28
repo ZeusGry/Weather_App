@@ -2,7 +2,7 @@ package mapService.mapAccuWeather;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class Maximum {
+public class DewPoint {
     @JsonProperty("Value")
     public double value;
     @JsonProperty("Unit")

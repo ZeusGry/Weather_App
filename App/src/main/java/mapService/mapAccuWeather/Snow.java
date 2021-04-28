@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Snow {
     @JsonProperty("Value")
-    public double value;
+    public int value;
     @JsonProperty("Unit")
     public String unit;
     @JsonProperty("UnitType")

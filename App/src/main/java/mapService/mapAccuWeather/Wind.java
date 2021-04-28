@@ -7,4 +7,12 @@ public class Wind {
     public Speed speed;
     @JsonProperty("Direction")
     public Direction direction;
+
+    public double getSpeed() {
+        return speed.getValue();
+    }
+
+    public double getDirection() {
+        return direction.getDegrees();
+    }
 }

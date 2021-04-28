@@ -32,7 +32,10 @@ public class Launcher {
         String city = scanner.nextLine();
         System.out.println("Podaj skrót literowy kraju");
         String country = scanner.nextLine();
-        localizations.add(new Localization(city, country));
+        Localization tmpLocalization = new Localization(city, country);
+        if (tmpLocalization.getID() != null) {
+            localizations.add(tmpLocalization);
+        }
     }
 
     private static void localizationChoice() {

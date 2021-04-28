@@ -1,6 +1,15 @@
 package Entity;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import hibernate_core.HibernateHelper;
+import json.JSONAsker;
+import json.Keys;
+import json.Servis;
+import mapService.localization_map.RootAccuWeatherLocalization;
+import mapService.mapAccuWeather.RootAccWeather;
+import mapService.mapOpenWeatherMap.RootOpenWeatherMap;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -12,8 +21,7 @@ import java.util.List;
 @Entity
 public class Localization {
     @Id
-            @GeneratedValue
-    Long ID;
+    String ID;
     String city;
     String region;
     String country;
@@ -21,14 +29,51 @@ public class Localization {
     Double latitude;
 
     public Localization(String city, String country) {
-        this.city = city;
-        this.country = country;
-//TODO
+        boolean isOkey = true;
+        this.city = city.substring(0, 1).toUpperCase() + city.substring(1);
+        this.country = country.toUpperCase();
+        ObjectMapper objectMapper = new ObjectMapper()
+                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        try {
+            RootOpenWeatherMap tempLoc = objectMapper.readValue(JSONAsker.getJSON(createURLForNewLozalizarion()), RootOpenWeatherMap.class);
+            System.out.println(createURLForNewLozalizarion());
+            longitude = tempLoc.getLon();
+            latitude = tempLoc.getLat();
+            if (longitude == null) {
+                isOkey = false;
+            }
+        } catch (JsonProcessingException e) {
+            System.out.println("Nie znaleziono takiego miejsca");
+            isOkey = false;
+        }
+        if (isOkey) {
+            try {
+                this.ID = objectMapper.readValue(JSONAsker.getJSON(JSONAsker.urlMaker(Servis.ACCUWEATHER_LOCATIONS, this)), RootAccuWeatherLocalization.class).getKey();
+            } catch (JsonProcessingException e) {
+                System.out.println("Nie znaleziono takiego miejsca");
+                isOkey = false;
+            }
+        }
+
+
         try (Session session = HibernateHelper.INSTANCE.getSession()) {
             Transaction transaction = session.beginTransaction();
             session.persist(this);
-            transaction.commit();
+            if (isOkey) {
+                transaction.commit();
+            } else {
+                transaction.rollback();
+            }
         }
+    }
+
+    private String createURLForNewLozalizarion() {
+        return Servis.OPEN_WEATHER.getUrl()
+                .replace("KeyToPut", Keys.getKeys()
+                        .getKeyOpenWeatherMap())
+                .replace("lat=Latination", "q=" +this.city)
+                .replace("lon=Longitude", this.country)
+                .replaceFirst("&", ",");
     }
 
     @Override
@@ -47,7 +92,7 @@ public class Localization {
         }
     }
 
-    public Long getID() {
+    public String getID() {
         return ID;
     }
 
@@ -59,15 +104,6 @@ public class Localization {
         return latitude;
     }
 
-    public void setLongitude(Double longitude) {
-        this.longitude = longitude;
-    }
 
-    public void setLatitude(Double latitude) {
-        this.latitude = latitude;
-    }
 
-    public void setID(Long ID) {
-        this.ID = ID;
-    }
 }

@@ -14,12 +14,12 @@ public class JSONAsker {
     public static String urlMaker(Servis servis, Localization localization) {
         String URL = servis.getUrl()
                 .replace("Longitude", Double.toString(localization.getLongitude()))
-                .replace("Latination", Double.toString(localization.getLatitude()))
-                .replace("CityKey", Long.toString(localization.getID()));
+                .replace("Latination", Double.toString(localization.getLatitude()));
         switch (servis) {
             case ACCUWEATHER:
                 return URL.replace("KeyToPut", Keys.getKeys()
-                        .getKeyAccuWeather());
+                        .getKeyAccuWeather())
+                        .replace("CityKey", localization.getID());
             case OPEN_WEATHER:
                 return URL.replace("KeyToPut", Keys.getKeys()
                         .getKeyOpenWeatherMap());
@@ -49,6 +49,7 @@ public class JSONAsker {
         } catch (IOException e) {
             System.err.println(e.getMessage());
         }
+        System.out.println(json);
         return json;
     }
 

@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.OptionalDouble;
 
-public class Math {
+public class MathWeather {
     static Double a;
     static Double b;
     static Double c;
@@ -37,11 +37,11 @@ public class Math {
 
     private static void calculateVector(WeatherHelper... weathers) {
         a = Arrays.stream(weathers)
-                .map(weather -> java.lang.Math.sin(weather.getDirectionWind()) * weather.getSpeedWind())
+                .map(weather -> java.lang.Math.sin(Math.toRadians(weather.getDirectionWind())) * weather.getSpeedWind())
                 .mapToDouble(e -> e)
                 .sum();
         b = Arrays.stream(weathers)
-                .map(weather -> java.lang.Math.cos(weather.getDirectionWind()) * weather.getSpeedWind())
+                .map(weather -> java.lang.Math.cos(Math.toRadians(weather.getDirectionWind())) * weather.getSpeedWind())
                 .mapToDouble(e -> e)
                 .sum();
         c = java.lang.Math.pow(java.lang.Math.pow(a, 2) + java.lang.Math.pow(b, 2), 0.5);
@@ -53,7 +53,7 @@ public class Math {
     }
 
     public static Double calculateAvgDirectionWind(WeatherHelper... weathers) {
-        Double direction = java.lang.Math.asin(c / a);
+        Double direction = (180+java.lang.Math.toDegrees(Math.atan(a/b)))%360;
         a = null;
         b = null;
         c = null;
