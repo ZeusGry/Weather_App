@@ -49,7 +49,6 @@ public class JSONAsker {
         } catch (IOException e) {
             System.err.println(e.getMessage());
         }
-        System.out.println(json);
         return json;
     }
 
