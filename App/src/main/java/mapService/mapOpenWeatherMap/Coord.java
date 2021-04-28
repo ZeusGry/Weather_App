@@ -2,14 +2,15 @@ package mapService.mapOpenWeatherMap;
 
 public class Coord {
 
-    public double lon;
-    public double lat;
 
-    public double getLon() {
+    public Double lon;
+    public Double lat;
+
+    public Double getLon() {
         return lon;
     }
 
-    public double getLat() {
+    public Double getLat() {
         return lat;
     }
 }

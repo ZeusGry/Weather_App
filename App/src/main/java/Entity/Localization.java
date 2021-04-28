@@ -36,11 +36,11 @@ public class Localization {
                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         try {
             RootOpenWeatherMap tempLoc = objectMapper.readValue(JSONAsker.getJSON(createURLForNewLozalizarion()), RootOpenWeatherMap.class);
-            System.out.println(createURLForNewLozalizarion());
-            longitude = tempLoc.getLon();
-            latitude = tempLoc.getLat();
-            if (longitude == null) {
+            if (tempLoc.getLat() == null) {
                 isOkey = false;
+            } else {
+                longitude = tempLoc.getLon();
+                latitude = tempLoc.getLat();
             }
         } catch (JsonProcessingException e) {
             System.out.println("Nie znaleziono takiego miejsca");
@@ -58,8 +58,9 @@ public class Localization {
 
         try (Session session = HibernateHelper.INSTANCE.getSession()) {
             Transaction transaction = session.beginTransaction();
-            session.persist(this);
+
             if (isOkey) {
+                session.persist(this);
                 transaction.commit();
             } else {
                 transaction.rollback();
