@@ -19,4 +19,24 @@ public class Current {
     public int uv_index;
     public int visibility;
     public String is_day;
+
+    public int getTemperature() {
+        return temperature;
+    }
+
+    public int getWind_speed() {
+        return wind_speed;
+    }
+
+    public int getWind_degree() {
+        return wind_degree;
+    }
+
+    public int getPressure() {
+        return pressure;
+    }
+
+    public int getHumidity() {
+        return humidity;
+    }
 }

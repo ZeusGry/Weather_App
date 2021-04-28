@@ -7,4 +7,16 @@ public class Temperature {
     public double temp_max;
     public int pressure;
     public int humidity;
+
+    public double getTemp() {
+        return temp;
+    }
+
+    public int getPressure() {
+        return pressure;
+    }
+
+    public int getHumidity() {
+        return humidity;
+    }
 }

@@ -9,4 +9,8 @@ public class Direction {
     public String localized;
     @JsonProperty("English")
     public String english;
+
+    public int getDegrees() {
+        return degrees;
+    }
 }

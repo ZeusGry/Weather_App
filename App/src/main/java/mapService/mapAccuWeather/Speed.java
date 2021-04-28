@@ -9,4 +9,8 @@ public class Speed {
     public String unit;
     @JsonProperty("UnitType")
     public int unitType;
+
+    public double getValue() {
+        return value;
+    }
 }

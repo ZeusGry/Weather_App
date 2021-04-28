@@ -7,7 +7,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class Keys {
-    private static Keys keys;
+    static Keys keys;
 
     public static Keys getKeys() {
         if (keys == null) {
