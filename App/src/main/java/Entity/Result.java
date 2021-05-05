@@ -37,6 +37,7 @@ public class Result {
             if (servis.isWeather()) {
                 String json = JSONAsker.getJSON(JSONAsker.urlMaker(servis, localization));
                 tempList = Mapper.weatherMapping(this, servis, json);
+
             }
         }
 
@@ -66,6 +67,7 @@ public class Result {
 
     public void setOpenWeatherMap(OpenWeatherMap openWeatherMap) {
         this.openWeatherMap = openWeatherMap;
+
     }
 
     public void setWeatherStack(WeatherStack weatherStack) {

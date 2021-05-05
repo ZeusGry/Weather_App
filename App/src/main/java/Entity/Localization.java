@@ -58,6 +58,7 @@ public class Localization {
 
     private void fillLocalization() {
         boolean isOkey = true;
+
         try {
             Mapper.setLongiuteAndLatitude(this);
         } catch (JsonProcessingException e) {
@@ -71,6 +72,7 @@ public class Localization {
                 System.out.println("Nie znaleziono takiego miejsca");
             }
         }
+
     }
 
 
