@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import core.MathWeather;
 import hibernate_core.HibernateHelper;
 import json.JSONAsker;
+import json.Mapper;
 import json.Servis;
 import mapService.mapAccuWeather.RootAccWeather;
 import mapService.mapOpenWeatherMap.RootOpenWeatherMap;
@@ -31,13 +32,12 @@ public class Result {
 
     public Result(Localization localization) {
         this.localization = localization;
-        List<WeatherHelper> tempList = new ArrayList<>();
-        ObjectMapper objectMapper = new ObjectMapper()
-                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        List<WeatherHelper> tempList =null;
         for (Servis servis : Servis.values()) {
             if (servis.isWeather()) {
                 String json = JSONAsker.getJSON(JSONAsker.urlMaker(servis, localization));
-                weatherMapping(tempList, objectMapper, servis, json);
+                tempList = Mapper.weatherMapping(this, servis, json);
+
             }
         }
 
@@ -47,51 +47,33 @@ public class Result {
                 .orElse(0), MathWeather.calculateAvgPressure(weathers)
                 .orElse(0), MathWeather.calculateAvgHumidity(weathers)
                 .orElse(0), MathWeather.calculateAvgSpeedWind(weathers), MathWeather.calculateAvgDirectionWind());
-        transactionCommit();
     }
 
-    private void transactionCommit() {
-        try (Session session = HibernateHelper.INSTANCE.getSession()) {
-            Transaction transaction = session.beginTransaction();
-            session.persist(accuWeather);
-            session.persist(averageWeather);
-            session.persist(openWeatherMap);
-            session.persist(weatherStack);
-            session.persist(this);
-            transaction.commit();
-        }
+    public AccuWeather getAccuWeather() {
+        return accuWeather;
     }
 
-    private void weatherMapping(List<WeatherHelper> tempList, ObjectMapper objectMapper, Servis servis, String json) {
-        switch (servis) {
-            case ACCUWEATHER:
-                try {
-                    accuWeather = objectMapper.readValue(json.substring(1, json.length()), RootAccWeather.class).getAccuWeather();
-                    tempList.add(accuWeather);
-                } catch (JsonProcessingException e) {
-                    System.out.println("Nie udało się pobrać pogody z AccuWeather");
-                }
-                break;
-            case WEATHER_STACK:
-                try {
-                    weatherStack = objectMapper.readValue(json, RootWeatherStack.class)
-                            .getWeatherStack();
-                    tempList.add(weatherStack);
-                } catch (JsonProcessingException e) {
-                    System.out.println("Nie udało się pobrać pogody z WeatherStack");
-                }
-                break;
-            case OPEN_WEATHER:
-                try {
-                    openWeatherMap = objectMapper.readValue(json, RootOpenWeatherMap.class)
-                            .getOpenWeatherMap();
-                    tempList.add(openWeatherMap);
-                } catch (JsonProcessingException e) {
-                    System.out.println("Nie udało się pobrać pogody z OpenWeather");
-                }
-                break;
-        }
+    public OpenWeatherMap getOpenWeatherMap() {
+        return openWeatherMap;
     }
+
+    public WeatherStack getWeatherStack() {
+        return weatherStack;
+    }
+
+    public void setAccuWeather(AccuWeather accuWeather) {
+        this.accuWeather = accuWeather;
+    }
+
+    public void setOpenWeatherMap(OpenWeatherMap openWeatherMap) {
+        this.openWeatherMap = openWeatherMap;
+
+    }
+
+    public void setWeatherStack(WeatherStack weatherStack) {
+        this.weatherStack = weatherStack;
+    }
+
 
     public Result() {
     }
