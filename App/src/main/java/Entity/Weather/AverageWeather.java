@@ -16,7 +16,7 @@ public class AverageWeather extends WeatherHelper {
 
     @Override
     public String toString() {
-        return "AverageWeather{" +
+        return "Pogoda na bazie trzech serwisów{" +
                 "temperatura=" + temperature +
                 ", ciśnienie=" + pressure +
                 ", wilgotność=" + humidity +

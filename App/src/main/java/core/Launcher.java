@@ -2,20 +2,32 @@ package core;
 
 import Entity.Localization;
 import Entity.Result;
+import com.sun.xml.bind.v2.TODO;
+import hibernate_core.DatabaseCommunication;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class Launcher {
-    static boolean finish = false;
-    static List<Localization> localizations = Localization.getList();
+
+    static List<Localization> localizations = DatabaseCommunication.getLocalizationList();
+    static List<Localization> tmpLocalizations;
+    static List<Result> resultsLists = new ArrayList<>();
+
+
     public static void start (){
+        boolean finish = false;
         while (!finish) {
             switch (choice()) {
                 case 1:
                     newLocalization();
                     break;
                 case 2:
-                    localizationChoice();
+                    Result tmpResult = localizationChoice();
+                    if (tmpResult != null) {
+                        resultsLists.add(tmpResult);
+                    }
                     break;
                 case 3:
                     finish = true;
@@ -24,21 +36,31 @@ public class Launcher {
                     System.out.println("Nie rozpoznano komendy");
             }
         }
+        if (!tmpLocalizations.isEmpty()) {
+            DatabaseCommunication.saveLocation(tmpLocalizations);
+        }
+        if (!resultsLists.isEmpty()) {
+            DatabaseCommunication.saveResults(resultsLists);
+        }
     }
 
     private static void newLocalization() {
+        if(tmpLocalizations == null) {
+            tmpLocalizations = new ArrayList<>();
+        }
         Scanner scanner =  new Scanner(System.in);
         System.out.println("Podaj miasto");
         String city = scanner.nextLine();
         System.out.println("Podaj skrót literowy kraju");
         String country = scanner.nextLine();
-        Localization tmpLocalization = new Localization(city, country);
-        if (tmpLocalization.getID() != null) {
-            localizations.add(tmpLocalization);
+        Localization tmpLoc = new Localization(city, country);
+        if (tmpLoc.getID() != null) {
+            localizations.add(tmpLoc);
+            tmpLocalizations.add(tmpLoc);
         }
     }
 
-    private static void localizationChoice() {
+    private static Result localizationChoice() {
         Scanner scanner = new Scanner(System.in);
         int count = 1;
         for (Localization localization : localizations) {
@@ -50,7 +72,7 @@ public class Launcher {
         scanner.nextLine();
 
         if (answer == 0) {
-            return;
+            return null;
         } else if (answer >localizations.size() || answer < 0) {
             System.out.println("Wybrano nieistniejący numer, spróbuj ponownie");
             localizationChoice();
@@ -58,8 +80,9 @@ public class Launcher {
             answer--;
             Result result = new Result(localizations.get(answer));
             System.out.println(result.getAverageWeather());
+            return result;
         }
-
+        return null;
     }
 
     private static int choice(){
